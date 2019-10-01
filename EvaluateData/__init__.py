@@ -7,15 +7,15 @@ import json
 import azure.functions as func
 
 from azure.cognitiveservices.vision.customvision.training import CustomVisionTrainingClient
-from azure.cognitiveservices.vision.customvision.training.models import ImageUrlCreateEntry
+from azure.cognitiveservices.vision.customvision.training.models import ImageUrlCreateEntry, Region
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('MLP Pbject Detection HTTP trigger function AddLabeledData processed a request.')
 
-    data_blob_url = req.params.get('DataBlobUrl')
-    if not data_blob_url:
+    image_url = req.params.get('ImageUrl')
+    if not image_url:
         return func.HttpResponse(
-                "Please pass a URL to a blob containing the image to be added to training in this request on the query string.",
+                "Please pass a URL to an image to be added to training in this request on the query string.",
                 status_code=400
         )
 
@@ -59,6 +59,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     labels.append(tag.id)
                     count_of_tags_applied_to_image = count_of_tags_applied_to_image + 1
                     break
+
         top_left_x = labeled_region['points'][0]['x']
         top_left_y = labeled_region['points'][0]['y']
         top_right_x = labeled_region['points'][1]['x']
@@ -74,10 +75,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         normalized_width = (top_right_x - top_left_x) / image_height
         normalized_height = (bottom_left_y - top_left_y) / image_height
 
-    if name:
-        return func.HttpResponse(f"Hello {name}!")
-    else:
-        return func.HttpResponse(
-             "Please pass a name on the query string or in the request body",
-             status_code=400
-        )
+        regions = [ Region(tag_id=labels[0], left=normalized_left,top=normalized_top,width=normalized_width,height=normalized_height) ]
+
+    image_with_labeled_regions = ImageUrlCreateEntry(url=image_url, regions=regions)
+    upload_result = trainer.create_images_from_urls(project_id, images=image_with_labeled_regions)
+
+    if not upload_result.is_batch_successful:
+        print("Image batch upload failed.")
+        for image in upload_result.images:
+            print("Image status: ", image.status)
+        exit(-1)
