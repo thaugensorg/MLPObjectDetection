@@ -22,7 +22,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     image_labeling_json = req.params.get('LabeledRegions')
     if not image_labeling_json:
         try:
-            image_labeling_json = req.get_json()
+            image_labeling_json = req.get_body()
         except:
             return func.HttpResponse(
                 "Please pass JSON containing the labeled regions associated with this image on the query string or in the request body.",
@@ -62,7 +62,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     labels.append(tag.id)
                     count_of_lables_applied_to_region = count_of_lables_applied_to_region + 1
                     break
-        count_of_regions_applied_to_image = count_of_regions_applied_to_image + 1
+        if count_of_lables_applied_to_region > 0:
+            count_of_regions_applied_to_image = count_of_regions_applied_to_image + 1
+        else:
+            return func.HttpResponse(
+                "This Azure Cognitive Services Object Detection project does not contain any labeling tags.  Please add tags to the project before attempting to add labeled data into the project.",
+                status_code=400
+            )
 
         top_left_x = labeled_region['points'][0]['x']
         top_left_y = labeled_region['points'][0]['y']

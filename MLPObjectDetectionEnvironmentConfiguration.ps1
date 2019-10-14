@@ -96,7 +96,7 @@ $cog_services_training_key = `
 
 Write-Host "Creating cognitive services custom vision project: " $accountName "CustomVisionProject" -ForegroundColor "Green"
 
-$url = "https://" + $modelCogServicesLocation + ".api.cognitive.microsoft.com/customvision/v3.0/training/projects?name=" + $accountName + "CustomVisionProject&classificationType=Multilabel"
+$url = "https://" + $modelCogServicesLocation + ".api.cognitive.microsoft.com/customvision/v3.0/training/projects?name=" + $accountName + "CustomVisionProject&classificationType=Multiclass"
 $url
 
 $headers = @{}
