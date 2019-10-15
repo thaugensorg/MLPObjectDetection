@@ -90,17 +90,29 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     labeled_images_with_regions.append(ImageUrlCreateEntry(url=image_url, regions=regions))
     upload_result = trainer.create_images_from_urls(project_id, images=labeled_images_with_regions)
 
+    result = ""
     if upload_result.is_batch_successful:
+        for image in upload_result.images:
+            result = result + "Image " + image.source_url + " Status: " + image.status + ", "
         return func.HttpResponse(
-                "Image " + image_url + "successfully uploaded with " + count_of_regions_applied_to_image + " regions and " + count_of_lables_applied_to_region + " label(s) to project " + project_id,
+                "Images successfully uploaded with " + str(count_of_regions_applied_to_image) + " regions and " + str(count_of_lables_applied_to_region) + " label(s) to project " + project_id + "with result: " + result,
                 status_code=400
         )
     else:
-        result = ""
+        success = True
         for image in upload_result.images:
-            result = result + "Image status: " + image.status
-
-        return func.HttpResponse(
+            result = result + "Image " + image.source_url + " Status: " + image.status + ", "
+            if not "ok" in image.status.lower():
+                success = False
+        
+        if success:
+            return func.HttpResponse(
+                "Image batch upload succeeded with result: " + result,
+                status_code=400
+        )
+        else:
+            return func.HttpResponse(
                 "Image batch upload failed with result: " + result,
                 status_code=400
         )
+          

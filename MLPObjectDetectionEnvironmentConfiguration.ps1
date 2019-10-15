@@ -108,28 +108,28 @@ $url
 
 Invoke-RestMethod -Uri $url -Headers $headers -Method Post | ConvertTo-Json
 
-Write-Host "Creating app config setting: subscriptionKey.  There is no default value and this key must be filled in after deployment." -ForegroundColor "Yellow"
+Write-Host "Creating app config setting: SubscriptionKey.  There is no default value and this key must be filled in after deployment." -ForegroundColor "Yellow"
 
 az functionapp config appsettings set `
     --name $ModelAppName `
     --resource-group $modelResourceGroupName `
-    --settings "subscriptionKey=$cog_services_training_key"
+    --settings "SubscriptionKey=$cog_services_training_key"
 
-Write-Host "Creating app config setting: projectID for cognitive services.  There is no default and this must be filled in after this script completes or the model will not run." -ForegroundColor "Yellow"
-
-az functionapp config appsettings set `
-    --name $ModelAppName `
-    --resource-group $modelResourceGroupName `
-    --settings "projectID=Null"
-
-Write-Host "Creating app config setting: trainingKey for cognitive services." -ForegroundColor "Green"
+Write-Host "Creating app config setting: ProjectID for cognitive services.  There is no default and this must be filled in after this script completes or the model will not run." -ForegroundColor "Yellow"
 
 az functionapp config appsettings set `
     --name $ModelAppName `
     --resource-group $modelResourceGroupName `
-    --settings "trainingKey=$cog_services_training_key"
+    --settings "ProjectID=Null"
 
-Write-Host "Creating app config setting: predictionKey for cognitive services." -ForegroundColor "Green"
+Write-Host "Creating app config setting: TrainingKey for cognitive services." -ForegroundColor "Green"
+
+az functionapp config appsettings set `
+    --name $ModelAppName `
+    --resource-group $modelResourceGroupName `
+    --settings "TrainingKey=$cog_services_training_key"
+
+Write-Host "Creating app config setting: PredictionKey for cognitive services." -ForegroundColor "Green"
 
 $accountName = $ModelAppName + "Prediction"
 
@@ -141,22 +141,22 @@ $cog_services_prediction_key = `
 az functionapp config appsettings set `
     --name $ModelAppName `
     --resource-group $modelResourceGroupName `
-    --settings "predictionKey=$cog_services_prediction_key"
+    --settings "PredictionKey=$cog_services_prediction_key"
 
-Write-Host "Creating app config setting: predictionID for cognitive services.  There is no default and this must be filled in after this script completes or the model will not run." -ForegroundColor "Yellow"
+Write-Host "Creating app config setting: PredictionID for cognitive services.  There is no default and this must be filled in after this script completes or the model will not run." -ForegroundColor "Yellow"
 Write-Host "This is called Resource ID in the Cog Services portal and can be found under the Prediction resource on the home page configuration settings of your cog services account https://www.customvision.ai/projects#/settings" -ForegroundColor "Yellow"
 
 az functionapp config appsettings set `
     --name $ModelAppName `
     --resource-group $modelResourceGroupName `
-    --settings "predictionID=Null"
+    --settings "PredictionID=Null"
 
-Write-Host "Creating app config setting: predictionKey for cognitive services." -ForegroundColor "Green"
+Write-Host "Creating app config setting: ClientEndpoint for cognitive services." -ForegroundColor "Green"
 
 az functionapp config appsettings set `
     --name $ModelAppName `
     --resource-group $modelResourceGroupName `
-    --settings "clientEndpoint=https://$modelCogServicesLocation.api.cognitive.microsoft.com/"
+    --settings "ClientEndpoint=https://$modelCogServicesLocation.api.cognitive.microsoft.com/"
 
 #gitrepo=https://github.com/thaugensorg/semi-supervisedModelSolution.git
 #token=<Replace with a GitHub access token>

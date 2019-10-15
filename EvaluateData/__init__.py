@@ -14,22 +14,22 @@ from azure.cognitiveservices.vision.customvision.prediction import CustomVisionP
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    data_url = req.params.get('dataBlobUrl')
+    data_url = req.params.get('ImageUrl')
     if not data_url:
         try:
             req_body = req.get_json()
         except ValueError:
             pass
         else:
-            data_url = req_body.get('dataBlobUrl')
+            data_url = req_body.get('ImageUrl')
 
     if data_url:
 
         # Get Cognitive Services Environment Variables
-        project_id = os.environ["projectID"]
-        training_key = os.environ['trainingKey']
-        prediction_key = os.environ['predictionKey']
-        client_endpoint = os.environ['clientEndpoint']
+        project_id = os.environ["ProjectID"]
+        training_key = os.environ['TrainingKey']
+        prediction_key = os.environ['PredictionKey']
+        client_endpoint = os.environ['ClientEndpoint']
 
 
         trainer = CustomVisionTrainingClient(training_key, endpoint=client_endpoint)

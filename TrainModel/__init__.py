@@ -13,11 +13,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('ML Professoar HTTP trigger function TrainModel processed a request.')
 
     # Get Cognitive Services Environment Variables
-    project_id = os.environ["projectID"]
-    training_key = os.environ['trainingKey']
-    endpoint = os.environ['clientEndpoint']
+    project_id = os.environ["ProjectID"]
+    training_key = os.environ['TrainingKey']
+    endpoint = os.environ['ClientEndpoint']
     publish_iteration_name = "SampleTreeDetection @ " + str(datetime.now())
-    prediction_resource_id = os.environ['predictionID']
+    prediction_resource_id = os.environ['PredictionID']
 
     trainer = CustomVisionTrainingClient(training_key, endpoint=endpoint)
 

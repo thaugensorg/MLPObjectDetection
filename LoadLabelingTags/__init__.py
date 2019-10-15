@@ -15,8 +15,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('ML Professoar HTTP trigger function LoadLabelingTags processed a request.')
 
     # Get Cognitive Services Environment Variables
-    project_id = os.environ["projectID"]
-    training_key = os.environ['trainingKey']
+    project_id = os.environ["ProjectID"]
+    training_key = os.environ['TrainingKey']
 
     if project_id:
         labels_json = req.params.get('LabelsJson')
@@ -33,7 +33,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         
         if labels_json:
 
-            endpoint = os.environ['clientEndpoint']
+            endpoint = os.environ['ClientEndpoint']
 
             # the consol app at this address shows how to properly form URLs for Cognitive Services custom model development https://westus2.dev.cognitive.microsoft.com/docs/services/fde264b7c0e94a529a0ad6d26550a761/operations/59568ae208fa5e09ecb9984e/console
             load_tags_url = endpoint + "/customvision/v3.0/Training/projects/" + project_id + "/tags"
@@ -60,6 +60,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             return func.HttpResponse("Loaded " + str(count_of_labels_added) + " labels into project id: " + project_id + "  Note: " + str(count_of_duplicate_labels) + " labels were duplicates to existing project labels.  See log file for label names.")
     else:
         return func.HttpResponse(
-             "Please configure projectID and/or trainingKey in your environment variables.",
+             "Please configure ProjectID and/or TrainingKey in your environment variables.",
              status_code=400
         )
