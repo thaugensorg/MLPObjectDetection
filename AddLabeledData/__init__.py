@@ -82,7 +82,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         # calculate normalized coordinates.
         normalized_left = top_left_x / image_width
         normalized_top = top_left_y / image_height
-        normalized_width = (top_right_x - top_left_x) / image_height
+        normalized_width = (top_right_x - top_left_x) / image_width
         normalized_height = (bottom_left_y - top_left_y) / image_height
 
         regions = [ Region(tag_id=labels[0], left=normalized_left,top=normalized_top,width=normalized_width,height=normalized_height) ]
