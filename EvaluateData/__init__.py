@@ -39,7 +39,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             current_iteration = iterations[0]
             current_iteration_name = current_iteration.publish_name
 
-            http_endpoint = client_endpoint + "customvision/v3.0/Prediction/" + project_id + "/classify/iterations/" + current_iteration_name + "/url"
+            http_endpoint = client_endpoint + "customvision/v3.0/Prediction/" + project_id + "/detect/iterations/" + current_iteration_name + "/url"
 
             headers = {'Prediction-Key': prediction_key, 'Content-Type': 'application/json'}
             data = {"url": data_url}
