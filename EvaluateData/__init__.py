@@ -55,10 +55,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             return func.HttpResponse(json.dumps(response_dictionary))
 
         else:
-            return f'Model not trained.'
-            # return func.HttpResponse("Model not trained.", status_code=400)
+            # return f'Model not trained.'
+            return func.HttpResponse(
+                "Model not trained.",
+                status_code=409
+            )
     else:
         return func.HttpResponse(
-             "Please pass a dataBlobUrl on the query string or in the request body",
-             status_code=400
+            "Please pass a ImageUrl on the query string or in the request body",
+            status_code=412
         )

@@ -34,8 +34,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         message = str(e)
         logging.info(message)
+        
+        return func.HttpResponse(
+            "Training complete for ProjectID: " + project_id + " failed with message: " + message,
+            status_code=400)
 
     return func.HttpResponse(
-        "Training complete for ProjectID: " + project_id + " publisehed under iteration name: " + publish_iteration_name,
-        status_code=400)
+        "Training complete for ProjectID: " + project_id + " published under iteration name: " + publish_iteration_name,
+        status_code=201)
 
