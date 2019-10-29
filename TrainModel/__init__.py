@@ -17,7 +17,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     training_key = os.environ['TrainingKey']
     endpoint = os.environ['ClientEndpoint']
     publish_iteration_name = "SampleTreeDetection @ " + str(datetime.now())
-    prediction_resource_id = os.environ['PredictionID']
+    prediction_resource_id = os.environ['ResourceID']
 
     trainer = CustomVisionTrainingClient(training_key, endpoint=endpoint)
 

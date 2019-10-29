@@ -108,19 +108,28 @@ $url
 
 Invoke-RestMethod -Uri $url -Headers $headers -Method Post | ConvertTo-Json
 
-Write-Host "Creating app config setting: SubscriptionKey.  There is no default value and this key must be filled in after deployment." -ForegroundColor "Yellow"
+Write-Host "Creating app config setting: SubscriptionKey." -ForegroundColor "Green"
 
 az functionapp config appsettings set `
     --name $ModelAppName `
     --resource-group $modelResourceGroupName `
     --settings "SubscriptionKey=$cog_services_training_key"
 
-Write-Host "Creating app config setting: ProjectID for cognitive services.  There is no default and this must be filled in after this script completes or the model will not run." -ForegroundColor "Yellow"
+Write-Host "Creating app config setting: ProjectID for cognitive services." -ForegroundColor "Green"
+
+$url = "https://westus2.api.cognitive.microsoft.com/customvision/v3.0/training/projects"
+
+  $headers = @{
+      'Training-Key' = $cog_services_training_key }
+
+$projects = (Invoke-RestMethod -Uri $url -Headers $headers -Method Get)
+
+$projectId = $projects | Where-Object {$_."name" -eq $accountName + "CustomVisionProject"} | Select-Object -Property id
 
 az functionapp config appsettings set `
     --name $ModelAppName `
     --resource-group $modelResourceGroupName `
-    --settings "ProjectID=Null"
+    --settings "ProjectID=$projectId"
 
 Write-Host "Creating app config setting: TrainingKey for cognitive services." -ForegroundColor "Green"
 
@@ -143,13 +152,15 @@ az functionapp config appsettings set `
     --resource-group $modelResourceGroupName `
     --settings "PredictionKey=$cog_services_prediction_key"
 
-Write-Host "Creating app config setting: PredictionID for cognitive services.  There is no default and this must be filled in after this script completes or the model will not run." -ForegroundColor "Yellow"
-Write-Host "This is called Resource ID in the Cog Services portal and can be found under the Prediction resource on the home page configuration settings of your cog services account https://www.customvision.ai/projects#/settings" -ForegroundColor "Yellow"
+Write-Host "Creating app config setting: ResourceID for cognitive services.  This can be found under the Prediction resource on the HOME PAGE configuration settings of your cog services account https://www.customvision.ai/projects#/settings" -ForegroundColor "Green"
+
+$subscription_id = (Get-AzureRmSubscription -SubscriptionName Thaugen-semisupervised-vision-closed-loop-solution).Id
+$resource_id = "/subscriptions/" + $subscription_id + "/resourceGroups/" + $modelResourceGroupName + "/providers/Microsoft.CognitiveServices/accounts/" + $accountName
 
 az functionapp config appsettings set `
     --name $ModelAppName `
     --resource-group $modelResourceGroupName `
-    --settings "PredictionID=Null"
+    --settings "ResourceID=$resource_id"
 
 Write-Host "Creating app config setting: ClientEndpoint for cognitive services." -ForegroundColor "Green"
 

@@ -12,22 +12,20 @@ from azure.cognitiveservices.vision.customvision.training.models import ImageUrl
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('MLP Pbject Detection HTTP trigger function AddLabeledData processed a request.')
 
-    image_url = req.params.get('ImageUrl')
-    if not image_url:
+    try:
+        labeled_data_binary = req.get_body()
+    except:
         return func.HttpResponse(
-                "Please pass a URL to an image to be added to training in this request on the query string.",
-                status_code=400
+            "Please pass JSON containing the labeled regions associated with this image on the query string or in the request body.",
+            status_code=400
         )
 
-    image_labeling_json = req.params.get('LabeledRegions')
-    if not image_labeling_json:
-        try:
-            image_labeling_json = req.get_body()
-        except:
-            return func.HttpResponse(
-                "Please pass JSON containing the labeled regions associated with this image on the query string or in the request body.",
-                status_code=400
-            )
+    else:
+        labeled_data_json = labeled_data_binary.decode("utf-8")
+        labeled_data_dict = json.loads(labeled_data_json)
+
+    image_url = labeled_data_dict['ImageUrl']
+    image_labeling_json = labeled_data_dict['ImageLabels']
 
     labels = []
     labeled_images_with_regions = []
