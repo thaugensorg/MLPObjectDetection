@@ -94,20 +94,6 @@ $cog_services_training_key = `
     -resourceGroupName $modelResourceGroupName `
     -AccountName $accountName).Key1
 
-Write-Host "Creating cognitive services custom vision project: " $accountName "CustomVisionProject" -ForegroundColor "Green"
-
-$url = "https://" + $modelCogServicesLocation + ".api.cognitive.microsoft.com/customvision/v3.0/training/projects?name=" + $accountName + "CustomVisionProject&classificationType=Multiclass"
-$url
-
-$headers = @{}
-$headers.add("Training-Key", $cog_services_training_key)
-$headers
-
-$cog_services_training_key
-$url
-
-Invoke-RestMethod -Uri $url -Headers $headers -Method Post | ConvertTo-Json
-
 Write-Host "Creating app config setting: SubscriptionKey." -ForegroundColor "Green"
 
 az functionapp config appsettings set `
@@ -123,8 +109,43 @@ $url = "https://westus2.api.cognitive.microsoft.com/customvision/v3.0/training/p
       'Training-Key' = $cog_services_training_key }
 
 $projects = (Invoke-RestMethod -Uri $url -Headers $headers -Method Get)
+$projectName = ($projects | Where-Object {$_."name" -eq $accountName + "CustomVisionProject"} | Select-Object -Property name).name
+$generatedProjectName = $accountName + "CustomVisionProject"
 
-$projectId = $projects | Where-Object {$_."name" -eq $accountName + "CustomVisionProject"} | Select-Object -Property id
+if ($projectName -ne $null) {
+  while($projectName -eq $generatedProjectName)
+  {
+    Write-Host "A cognitive services project already exists with the name: " $generatedProjectName -ForegroundColor "Red"
+
+    $projectName= Read-Host -Prompt "Please enter a different cognitive services project name or delete the existing project with the same name using the Cognitive services portal."
+  }
+}
+else {
+  $projectName = $generatedProjectName
+}
+
+Write-Host "Creating cognitive services custom vision project: " $projectName -ForegroundColor "Green"
+
+$url = "https://" + $modelCogServicesLocation + ".api.cognitive.microsoft.com/customvision/v3.0/training/projects?name=" + $projectName + "&domainId=da2e3a8a-40a5-4171-82f4-58522f70fbc1"
+$url
+
+$headers = @{}
+$headers.add("Training-Key", $cog_services_training_key)
+$headers
+
+$cog_services_training_key
+$url
+
+Invoke-RestMethod -Uri $url -Headers $headers -Method Post | ConvertTo-Json
+
+#get the project id to set as a config value
+$url = "https://westus2.api.cognitive.microsoft.com/customvision/v3.0/training/projects"
+
+  $headers = @{
+      'Training-Key' = $cog_services_training_key }
+
+$projects = (Invoke-RestMethod -Uri $url -Headers $headers -Method Get)
+$projectId = ($projects | Where-Object {$_."name" -eq $projectName} | Select-Object -Property id).id
 
 az functionapp config appsettings set `
     --name $ModelAppName `
