@@ -22,7 +22,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         except ValueError:
             return func.HttpResponse(
                 "Please pass a ImageUrl on the query string or in the request body",
-                status_code=412
+                status_code=400
             )
 
         else:
@@ -66,10 +66,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         else:
             return func.HttpResponse(
                 "Model not trained.",
-                status_code=409
+                status_code=400
             )
     else:
         return func.HttpResponse(
             "Please pass a ImageUrl on the query string or in the request body",
-            status_code=412
+            status_code=400
         )

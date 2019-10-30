@@ -41,5 +41,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     return func.HttpResponse(
         "Training complete for ProjectID: " + project_id + " published under iteration name: " + publish_iteration_name,
-        status_code=201)
+        status_code=200)
 
