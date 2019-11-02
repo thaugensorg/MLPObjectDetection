@@ -190,18 +190,3 @@ az functionapp config appsettings set `
     --resource-group $modelResourceGroupName `
     --settings "ClientEndpoint=https://$modelCogServicesLocation.api.cognitive.microsoft.com/"
 
-#gitrepo=https://github.com/thaugensorg/semi-supervisedModelSolution.git
-#token=<Replace with a GitHub access token>
-
-# Enable authenticated git deployment in your subscription from a private repo.
-#az functionapp deployment source update-token \
-#  --git-token $token
-
-# Create a function app with source files deployed from the specified GitHub repo.
-#az functionapp create \
-#  --name autoTestDeployment \
-#  --storage-account semisupervisedstorage \
-#  --consumption-plan-location centralUS\
-#  --resource-group customVisionModelTest \
-#  --deployment-source-url https://github.com/thaugensorg/semi-supervisedModelSolution.git \
-#  --deployment-source-branch master

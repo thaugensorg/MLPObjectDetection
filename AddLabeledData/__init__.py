@@ -13,19 +13,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('MLP Pbject Detection HTTP trigger function AddLabeledData processed a request.')
 
     try:
-        labeled_data_binary = req.get_body()
+        image_url = req.form.get('ImageUrl')
+        image_labeling_json = req.form.get('DataLabels')
     except:
         return func.HttpResponse(
             "Please pass JSON containing the labeled regions associated with this image on the query string or in the request body.",
             status_code=400
         )
-
-    else:
-        labeled_data_json = labeled_data_binary.decode("utf-8")
-        labeled_data_dict = json.loads(labeled_data_json)
-
-    image_url = labeled_data_dict['ImageUrl']
-    image_labeling_json = labeled_data_dict['ImageLabels']
 
     labels = []
     labeled_images_with_regions = []
