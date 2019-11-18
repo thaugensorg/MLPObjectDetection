@@ -22,7 +22,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         labels_json = req.params.get('LabelsJson')
         if not labels_json:
             try:
-                labels_json = req.form['LabelsJson']
+                labels_json = req.form.get('LabelsJson')
 
             except Exception as e:
                 message = str(e)
