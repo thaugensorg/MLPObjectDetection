@@ -15,18 +15,17 @@ from azure.cognitiveservices.vision.customvision.prediction import CustomVisionP
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    data_url = req.params.get('ImageUrl')
-    if not data_url:
-        try:
-            req_body = req.get_body()
-        except ValueError:
-            return func.HttpResponse(
-                "Please pass a ImageUrl on the query string or in the request body",
-                status_code=400
-            )
+    try:
+        data_url = req.params.get('ImageUrl')
+        if not data_url:
+            data_url = req.form.get('ImageUrl')
 
-        else:
-            data_url = req_body.decode("utf-8")
+    except ValueError:
+        return func.HttpResponse(
+            "Please pass a ImageUrl on the query string or in the request body",
+            status_code=400
+        )
+
 
     if data_url:
 
