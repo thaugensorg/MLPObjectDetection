@@ -110,9 +110,9 @@ $url = "https://westus2.api.cognitive.microsoft.com/customvision/v3.0/training/p
 
 $projects = (Invoke-RestMethod -Uri $url -Headers $headers -Method Get)
 $projectName = ($projects | Where-Object {$_."name" -eq $accountName + "CustomVisionProject"} | Select-Object -Property name).name
-$generatedProjectName = $accountName + "CustomVisionProject"
+$generatedProjectName = $ModelAppName + "CustomVisionProject"
 
-if ($projectName -ne $null) {
+if ($null -ne $projectName) {
   while($projectName -eq $generatedProjectName)
   {
     Write-Host "A cognitive services project already exists with the name: " $generatedProjectName -ForegroundColor "Red"

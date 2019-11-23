@@ -25,7 +25,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         labels = []
         labeled_images_with_regions = []
         count_of_regions_applied_to_image = 0
-        count_of_lables_applied_to_region = 0
+        count_of_labels_applied_to_region = 0
 
         endpoint = os.environ['ClientEndpoint']
 
@@ -53,9 +53,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 for tag in tags:
                     if tag.name == label:
                         labels.append(tag.id)
-                        count_of_lables_applied_to_region = count_of_lables_applied_to_region + 1
+                        count_of_labels_applied_to_region = count_of_labels_applied_to_region + 1
                         break
-            if count_of_lables_applied_to_region > 0:
+            if count_of_labels_applied_to_region > 0:
                 count_of_regions_applied_to_image = count_of_regions_applied_to_image + 1
             else:
                 return func.HttpResponse(
@@ -88,7 +88,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             for image in upload_result.images:
                 result = result + "Image " + image.source_url + " Status: " + image.status + ", "
             return func.HttpResponse(
-                    "Images successfully uploaded with " + str(count_of_regions_applied_to_image) + " regions and " + str(count_of_lables_applied_to_region) + " label(s) to project " + project_id + "with result: " + result,
+                    "Images successfully uploaded with " + str(count_of_regions_applied_to_image) + " regions and " + str(count_of_labels_applied_to_region) + " label(s) to project " + project_id + "with result: " + result,
                     status_code=200
             )
         else:
