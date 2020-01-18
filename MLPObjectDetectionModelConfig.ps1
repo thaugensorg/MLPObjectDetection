@@ -49,7 +49,7 @@ while([string]::IsNullOrWhiteSpace($ModelAppName))
 $modelStorageAccountKey = $null
 
 if (az group exists --name $modelResourceGroupName) `
-  {Write-Host "Deleting resource group." -ForegroundColor "Green" `
+  {Write-Host "Deleting resource group." -ForegroundColor "Green" 
   az group delete `
 	  --name $modelResourceGroupName `
 	  --subscription $subscription `
