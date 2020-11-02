@@ -16,10 +16,10 @@
     "confidenceJSONPath": "predictions[0].probability",
     "confidenceThreshold": "0.95",
     "modelVerificationPercentage": ".05",
-    "DataEvaluationServiceEndpoint": "https://mlpobjdetapp.azurewebsites.net/api/EvaluateData/",
-    "TagsUploadServiceEndpoint": "https://mlpobjdetapp.azurewebsites.net/api/LoadLabelingTags/",
-    "LabeledDataServiceEndpoint": "https://mlpobjdetapp.azurewebsites.net/api/AddLabeledData/",
-    "TrainModelServiceEndpoint": "https://mlpobjdetapp.azurewebsites.net/api/TrainModel/",
+    "DataEvaluationServiceEndpoint": "https://mlpobjdetmodelapp.azurewebsites.net/api/EvaluateData/",
+    "TagsUploadServiceEndpoint": "https://mlpobjdetmodelapp.azurewebsites.net/api/LoadLabelingTags/",
+    "LabeledDataServiceEndpoint": "https://mlpobjdetmodelapp.azurewebsites.net/api/AddLabeledData/",
+    "TrainModelServiceEndpoint": "https://mlpobjdetmodelapp.azurewebsites.net/api/TrainModel/",
     "evaluationDataParameterName": "ImageUrl",
     "labelingTagsParameterName": "LabelsJson",
     "labelingTagsBlobName": "LabelingTags.json",
@@ -30,8 +30,8 @@
     "blobSearchEndpoint": "https://mlpobjdetenginesrch.search.windows.net",
     "blobSearchServiceName": "bindinghashsearch",
     "blobSearchKey": "@Microsoft.KeyVault(SecretUri=https://mlprofessoarkeyvault.vault.azure.net:443/secrets/blobSearchKey/cf96fd907cd349ba84006ce9bc2172b1)",
-    "labelingSolutionName": "FileName",
-    "KeyVaultName": "MLProfessoarKeyVault",
+    "labelingSolutionName": "VoTT",
+    "KeyVaultName": "MLPObjDetEngineKV",
     "TestFileCount": "30"
   }
 }
